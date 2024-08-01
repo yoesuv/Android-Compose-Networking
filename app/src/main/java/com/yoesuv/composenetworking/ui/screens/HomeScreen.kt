@@ -11,18 +11,29 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.yoesuv.composenetworking.R
 import com.yoesuv.composenetworking.ui.route.AppRoute
+import com.yoesuv.composenetworking.ui.screens.components.AppTopBar
 import com.yoesuv.composenetworking.ui.theme.ComposeNetworkingTheme
 
 @Composable
 fun HomeScreen(nav: NavHostController) {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(
+        topBar = {
+            AppTopBar(
+                title = stringResource(id = R.string.app_name),
+                canBack = false
+            )
+        },
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -31,7 +42,7 @@ fun HomeScreen(nav: NavHostController) {
         ) {
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "Pilih Menu",
+                text = stringResource(id = R.string.select_menu),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -40,14 +51,14 @@ fun HomeScreen(nav: NavHostController) {
                 onClick = {
                     nav.navigate(AppRoute.ListPlace)
                 }) {
-                Text(text = "DAFTAR TEMPAT WISATA")
+                Text(text = stringResource(id = R.string.list_place).uppercase())
             }
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     nav.navigate(AppRoute.Gallery)
                 }) {
-                Text(text = "GALLERY TEMPAT WISATA")
+                Text(text = stringResource(id = R.string.gallery_place).uppercase())
             }
             Spacer(modifier = Modifier.weight(1f))
         }
