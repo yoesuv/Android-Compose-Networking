@@ -25,10 +25,10 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(navController)
                     }
                     composable<AppRoute.ListPlace> {
-                        ListPlaceScreen()
+                        ListPlaceScreen(navController)
                     }
                     composable<AppRoute.Gallery> {
-                        GalleryPlaceScreen()
+                        GalleryPlaceScreen(navController)
                     }
                 }
 
