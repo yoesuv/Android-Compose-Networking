@@ -1,7 +1,9 @@
 package com.yoesuv.composenetworking.ui.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -12,6 +14,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -19,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.yoesuv.composenetworking.R
 import com.yoesuv.composenetworking.ui.screens.components.AppTopBar
 import com.yoesuv.composenetworking.ui.theme.ComposeNetworkingTheme
@@ -50,6 +55,7 @@ fun GalleryPlaceScreen(nav: NavHostController, viewModel: GalleryViewModel = vie
         } else {
             Box(modifier = Modifier.padding(innerPadding)) {
                 LazyVerticalGrid(
+                    modifier = Modifier.fillMaxWidth(),
                     columns = GridCells.Fixed(3),
                 ) {
                     items(galleries) { gallery ->
@@ -63,7 +69,24 @@ fun GalleryPlaceScreen(nav: NavHostController, viewModel: GalleryViewModel = vie
 
 @Composable
 fun ItemGallery(imageUrl: String) {
-    AsyncImage(model = imageUrl, contentDescription = imageUrl, contentScale = ContentScale.Crop)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+    ) {
+        AsyncImage(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f),
+            model = ImageRequest.Builder(LocalContext.current).data(imageUrl)
+                .crossfade(true)
+                .crossfade(200)
+                .build(),
+            contentDescription = imageUrl,
+            contentScale = ContentScale.Crop,
+            placeholder = painterResource(R.drawable.placeholder_image),
+        )
+    }
 }
 
 @Preview(showBackground = true)
