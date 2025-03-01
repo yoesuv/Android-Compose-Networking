@@ -31,8 +31,7 @@ import com.yoesuv.composenetworking.ui.screens.components.AppTopBar
 import com.yoesuv.composenetworking.ui.theme.ComposeNetworkingTheme
 
 @Composable
-fun ListPlaceScreen(nav: NavHostController) {
-    val viewModel: ListPlaceViewModel = viewModel()
+fun ListPlaceScreen(nav: NavHostController, viewModel: ListPlaceViewModel = viewModel()) {
     val loading = viewModel.loading.value
     val places by viewModel.places.collectAsStateWithLifecycle()
 

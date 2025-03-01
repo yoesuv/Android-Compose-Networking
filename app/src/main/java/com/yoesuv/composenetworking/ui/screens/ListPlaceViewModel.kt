@@ -18,7 +18,7 @@ class ListPlaceViewModel : ViewModel() {
     val places: StateFlow<List<PlaceModel>> = _places
     val loading = mutableStateOf(false)
 
-    suspend fun loadListPlace() {
+    fun loadListPlace() {
         viewModelScope.launch {
             loading.value = true
             repository.getListPlace().fold(
