@@ -3,6 +3,7 @@ package com.yoesuv.composenetworking.ui.screens
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,6 +16,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.yoesuv.composenetworking.R
 import com.yoesuv.composenetworking.models.PlaceModel
 import com.yoesuv.composenetworking.ui.screens.components.AppTopBar
@@ -70,9 +74,14 @@ fun ItemPlace(placeModel: PlaceModel) {
     Row {
         Box(modifier = Modifier.size(60.dp, 60.dp)) {
             AsyncImage(
-                model = placeModel.thumbnail,
+                modifier = Modifier.aspectRatio(1f),
+                model = ImageRequest.Builder(LocalContext.current).data(placeModel.thumbnail)
+                    .crossfade(true)
+                    .crossfade(200)
+                    .build(),
                 contentDescription = placeModel.name,
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(R.drawable.placeholder_image),
             )
         }
         Column(modifier = Modifier.padding(horizontal = 10.dp)) {
