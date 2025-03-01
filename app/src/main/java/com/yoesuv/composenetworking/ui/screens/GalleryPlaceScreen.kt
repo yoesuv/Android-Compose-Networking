@@ -24,13 +24,13 @@ import com.yoesuv.composenetworking.ui.screens.components.AppTopBar
 import com.yoesuv.composenetworking.ui.theme.ComposeNetworkingTheme
 
 @Composable
-fun GalleryPlaceScreen(nav: NavHostController) {
-    val viewmodel: GalleryViewModel = viewModel()
-    val loading = viewmodel.loading.value
-    val galleries by viewmodel.galleries.collectAsStateWithLifecycle()
+fun GalleryPlaceScreen(nav: NavHostController, viewModel: GalleryViewModel = viewModel()) {
+
+    val loading = viewModel.loading.value
+    val galleries by viewModel.galleries.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        viewmodel.loadGallery()
+        viewModel.loadGallery()
     }
 
     Scaffold(
