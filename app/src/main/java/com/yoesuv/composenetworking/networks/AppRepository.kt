@@ -5,6 +5,6 @@ import com.yoesuv.composenetworking.models.GalleryModel
 import com.yoesuv.composenetworking.models.PlaceModel
 
 interface AppRepository {
-    suspend fun getListPlace(): Result<ApiResponse<PlaceModel>>
-    suspend fun getGallery(): Result<ApiResponse<GalleryModel>>
+    suspend fun getListPlace(): NetworkResult<ApiResponse<PlaceModel>>
+    suspend fun getGallery(): NetworkResult<ApiResponse<GalleryModel>>
 }

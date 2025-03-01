@@ -9,14 +9,12 @@ class AppRepositoryImpl : AppRepository {
 
     private val apiService = ApiService(httpClientAndroid)
 
-    override suspend fun getListPlace(): Result<ApiResponse<PlaceModel>> =
-        kotlin.runCatching {
-            apiService.getListPlaces().body<ApiResponse<PlaceModel>>()
-        }
+    override suspend fun getListPlace(): NetworkResult<ApiResponse<PlaceModel>> {
+        return apiService.call { apiService.getListPlaces().body<ApiResponse<PlaceModel>>() }
+    }
 
-    override suspend fun getGallery(): Result<ApiResponse<GalleryModel>> =
-        kotlin.runCatching {
-            apiService.getGallery().body<ApiResponse<GalleryModel>>()
-        }
+    override suspend fun getGallery(): NetworkResult<ApiResponse<GalleryModel>> {
+        return apiService.call { apiService.getGallery().body<ApiResponse<GalleryModel>>() }
+    }
 
 }
