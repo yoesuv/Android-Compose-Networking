@@ -1,6 +1,5 @@
 package com.yoesuv.composenetworking.ui.screens
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yoesuv.composenetworking.models.GalleryModel
@@ -14,43 +13,56 @@ import kotlinx.coroutines.launch
 class GalleryViewModel : ViewModel() {
 
     private val repository = AppRepositoryImpl()
+
     private var _galleries: MutableStateFlow<List<GalleryModel>> = MutableStateFlow(emptyList())
     val galleries: StateFlow<List<GalleryModel>> = _galleries
-    val loading = mutableStateOf(false)
+    private var _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+    private var _isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+
 
     fun loadGallery() {
         viewModelScope.launch {
-            loading.value = true
+            _isLoading.value = true
             when (val response = repository.getGallery()) {
                 is NetworkResult.GenericError -> {
-                    loading.value = false
-                    _galleries.value = emptyList()
+                    stopLoading()
                 }
 
                 is NetworkResult.HttpError -> {
-                    loading.value = false
-                    _galleries.value = emptyList()
+                    stopLoading()
                 }
 
                 is NetworkResult.NetworkError -> {
-                    loading.value = false
-                    _galleries.value = emptyList()
+                    stopLoading()
                 }
 
                 is NetworkResult.ParseError -> {
-                    loading.value = false
-                    _galleries.value = emptyList()
+                    stopLoading()
                 }
 
                 is NetworkResult.Success -> {
-                    loading.value = false
+                    stopLoading()
                     _galleries.value = response.data.data ?: emptyList()
-                    response.data.data?.let {
-                        _galleries.update { it }
-                    }
                 }
             }
         }
+    }
+
+    fun refreshGallery() {
+        _isLoading.value = true
+        viewModelScope.launch {
+            _isRefreshing.update { true }
+            _galleries.update { emptyList() }
+            loadGallery()
+        }
+    }
+
+    private fun stopLoading() {
+        _isLoading.value = false
+        _isRefreshing.value = false
+        _galleries.update { emptyList() }
     }
 
 }
