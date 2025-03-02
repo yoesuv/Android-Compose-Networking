@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,10 +31,13 @@ import com.yoesuv.composenetworking.R
 import com.yoesuv.composenetworking.ui.screens.components.AppTopBar
 import com.yoesuv.composenetworking.ui.theme.ComposeNetworkingTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryPlaceScreen(nav: NavHostController, viewModel: GalleryViewModel = viewModel()) {
 
-    val loading = viewModel.loading.value
+    val pullToRefreshState = rememberPullToRefreshState()
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val loading = viewModel.isLoading.collectAsStateWithLifecycle()
     val galleries by viewModel.galleries.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
@@ -50,10 +56,17 @@ fun GalleryPlaceScreen(nav: NavHostController, viewModel: GalleryViewModel = vie
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        if (loading) {
-            LoadingScreen()
-        } else {
-            Box(modifier = Modifier.padding(innerPadding)) {
+        PullToRefreshBox(
+            modifier = Modifier.padding(innerPadding),
+            state = pullToRefreshState,
+            isRefreshing = isRefreshing,
+            onRefresh = {
+                viewModel.refreshGallery()
+            }
+        ) {
+            if (loading.value) {
+                LoadingScreen()
+            } else {
                 LazyVerticalGrid(
                     modifier = Modifier.fillMaxWidth(),
                     columns = GridCells.Fixed(3),
