@@ -75,6 +75,10 @@ val httpClientAndroid = HttpClient(Android) {
     }
 
     defaultRequest {
+        url {
+            protocol = io.ktor.http.URLProtocol.HTTPS
+            host = "gist.githubusercontent.com"
+        }
         contentType(ContentType.Application.Json)
         accept(ContentType.Application.Json)
     }
